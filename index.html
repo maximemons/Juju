@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juju</title>
+    <style>
+        /* Réinitialisation et style pour occuper tout l'écran */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        /* Image en plein écran (couvre tout l'arrière-plan sans déformation) */
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        /* Bouton de secours si le navigateur bloque l'autoplay audio */
+        #play-button {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            border: 2px solid #fff;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-family: sans-serif;
+            border-radius: 30px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: background 0.3s, transform 0.2s;
+            display: none; /* Masqué par défaut, affiché si l'autoplay échoue */
+        }
+
+        #play-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-50%) scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Image en plein écran -->
+    <img src="./juju.jpg" alt="Juju" class="bg-image">
+
+    <!-- Élément audio (joue juju.mp3 en boucle) -->
+    <audio id="bg-audio" src="juju.mp3" loop preload="auto"></audio>
+
+    <!-- Bouton de lecture interactif de secours -->
+    <button id="play-button">🎵 Activer la musique</button>
+
+    <script>
+        const audio = document.getElementById('bg-audio');
+        const playButton = document.getElementById('play-button');
+
+        // Tente de lancer la musique automatiquement au chargement de la page
+        audio.play().then(() => {
+            // Lecture automatique réussie
+            console.log("Lecture automatique autorisée.");
+        }).catch((error) => {
+            // Lecture automatique bloquée par le navigateur, on affiche le bouton
+            console.log("Lecture automatique bloquée, affichage du bouton d'activation.");
+            playButton.style.display = 'block';
+        });
+
+        // Clic sur le bouton pour lancer la musique si elle a été bloquée
+        playButton.addEventListener('click', () => {
+            audio.play().then(() => {
+                playButton.style.display = 'none';
+            }).catch(e => {
+                console.error("Erreur lors de la lecture :", e);
+            });
+        });
+    </script>
+
+</body>
+</html>
